@@ -1,0 +1,83 @@
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+# Rider / JetBrains
+.idea/
+
+# Visual Studio user-specific files
+.vs/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Visual Studio cache/options
+*.obj
+*.cache
+*.pdb
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+*.pidb
+*.svclog
+*.vssscc
+
+# WPF auto-generated files
+*~.xaml
+*.g.cs
+*.g.i.cs
+
+# Migrations - opcional (apenas se você NÃO quiser versionar migrações)
+# Migrations/
+
+# Generated files
+Generated\ Files/
+
+# Other temporary files
+*.tmp
+*.temp
+*.log
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+project.lock.json
+project.assets.json
+
+# Entity Framework tools cache
+efcore.db/
+
+# SQL localdb files
+*.mdf
+*.ldf
+
+# Backup files
+*.bak
+*.old
+*.orig
+
+# Publish output
+publish/
+app.publish/
+
+# Dotnet local tools
+.dotnet/
+
+# OS-specific
+# Windows
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Mac
+.DS_Store
+
+# Logs
+*.log

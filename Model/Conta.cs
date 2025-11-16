@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UVV_fintech.View;
 
 namespace UVV_fintech.Model
 {
     internal abstract class Conta
     {
+        public int ContaId { get; set; }
+        public string NumeroConta { get; set; }
+        public decimal Saldo { get; set; } = 0;
+        public int ClienteId { get; set; }
+        public Cliente Cliente { get; set; }
+        public List<Transacao> Transacoes { get; set; } = new List<Transacao>();
 
-        private int ID { get; set; }
-        private int Numero { get; set; }
-        private float Saldo { get; set; }
-        private Cliente DonoConta { get; set; }
-
-        public Conta(int numero, float saldo, Cliente donoConta)
-        {
-            Numero = numero;
-            Saldo = saldo;
-            DonoConta = donoConta;
-        }
+        public Conta() { }
     }
 }

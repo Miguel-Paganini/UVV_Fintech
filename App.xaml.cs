@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace UVV_fintech
+namespace WpfApp1
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -10,5 +10,4 @@ namespace UVV_fintech
     public partial class App : Application
     {
     }
-
 }

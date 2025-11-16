@@ -8,8 +8,6 @@ namespace UVV_fintech.Model
 {
     internal class Deposito : Transacao
     {
-        public Deposito(DateTime dataTransacao, float valor) : base(dataTransacao, valor)
-        {
-        }
+        // Falta Implementar
     }
 }

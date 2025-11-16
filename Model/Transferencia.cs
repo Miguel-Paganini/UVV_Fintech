@@ -8,8 +8,6 @@ namespace UVV_fintech.Model
 {
     internal class Transferencia : Transacao
     {
-        public Transferencia(DateTime dataTransacao, float valor) : base(dataTransacao, valor)
-        {
-        }
+        // Falta Implementar
     }
 }

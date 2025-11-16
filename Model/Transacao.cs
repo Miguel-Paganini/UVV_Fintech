@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace UVV_fintech.Model
 {
-    internal abstract class Transacao
+    internal class Transacao
     {
-        private DateTime DataTransacao {  get; set; }
-        private float Valor {  get; set; }
-
-        public Transacao(DateTime dataTransacao, float valor)
-        {
-            DataTransacao = dataTransacao;
-            Valor = valor;
-        }
+        public int TransacaoId { get; set; }
+        public decimal Valor { get; set; }
+        public DateTime DataHora { get; set; }
+        public int ContaId { get; set; }
+        public Conta Conta { get; set; }
+        
+        protected Transacao() { }
     }
 }
