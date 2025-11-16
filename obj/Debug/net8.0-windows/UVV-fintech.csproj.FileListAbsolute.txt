@@ -1,0 +1,4 @@
+C:\ProjetosC#\UVV-FinTech\obj\Debug\net8.0-windows\UVV-fintech.csproj.AssemblyReference.cache
+C:\ProjetosC#\UVV-FinTech\obj\Debug\net8.0-windows\View\MainWindow.g.cs
+C:\ProjetosC#\UVV-FinTech\obj\Debug\net8.0-windows\UVV-fintech_MarkupCompile.cache
+C:\ProjetosC#\UVV-FinTech\obj\Debug\net8.0-windows\UVV-fintech_MarkupCompile.lref

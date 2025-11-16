@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Button x:Name="btnMenuCliente" Content="Menu Cliente" HorizontalAlignment="Left" Margin="207,0,0,0" VerticalAlignment="Center" Height="70" Width="159"/>
+        <Button x:Name="btnMenuBanco" Content="Menu Banco" HorizontalAlignment="Left" Margin="478,0,0,0" VerticalAlignment="Center" Height="70" Width="159"/>
+        <Label x:Name="lblTitulo" Content="UVV-FINTECH" HorizontalAlignment="Center" Margin="0,41,0,0" VerticalAlignment="Top" FontSize="48" FontWeight="Bold"/>
 
     </Grid>
 </Window>
