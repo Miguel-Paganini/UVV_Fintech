@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UVV_fintech.Model
+﻿namespace UVV_fintech.Model
 {
-    internal class Transferencia : Transacao
+    public class Transferencia : Transacao
     {
         // Falta Implementar
     }

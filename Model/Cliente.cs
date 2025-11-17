@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UVV_fintech.Db;
 
 namespace UVV_fintech.Model
 {
-    internal class Cliente
+    public class Cliente
     {
         public int ClienteId { get; set; }
         public string Nome { get; set; }
@@ -16,5 +12,18 @@ namespace UVV_fintech.Model
         public Conta Conta { get; set; }
 
         public Cliente() { }
+
+        public bool CadastrarCliente(Cliente cliente)
+        {
+            using var db = new BancoDbContext();
+
+            // Verificar CPF existente
+            if (db.Clientes.Any(c => c.Cpf == cliente.Cpf))
+                return false;
+
+            db.Add(cliente);
+            db.SaveChanges();
+            return true;
+        }
     }
 }

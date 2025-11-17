@@ -1,0 +1,55 @@
+﻿<Window x:Class="UVV_fintech.View.CriarConta"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UVV_fintech.View"
+        mc:Ignorable="d"
+        Title="CiarConta" Height="450" Width="800" ResizeMode="NoResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <StackPanel Grid.Row="0" Margin="0 0 0 10">
+            <TextBlock Text="Nome:"/>
+            <TextBox x:Name="TxtNome" Width="250"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="1" Margin="0 0 0 10">
+            <TextBlock Text="CPF:"/>
+            <TextBox x:Name="TxtCpf" Width="250"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="2" Margin="0 0 0 10">
+            <TextBlock Text="Telefone:"/>
+            <TextBox x:Name="TxtTelefone" Width="250"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="3" Margin="0 0 0 10">
+            <TextBlock Text="Endereço:"/>
+            <TextBox x:Name="TxtEndereco" Width="250"/>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="4" Margin="0 0 0 10">
+            <TextBlock Text="Tipo da Conta:"/>
+            <ComboBox x:Name="CbTipoConta" Width="250">
+                <ComboBoxItem Content="Conta Corrente" Tag="CC"/>
+                <ComboBoxItem Content="Conta Poupança" Tag="CP"/>
+            </ComboBox>
+        </StackPanel>
+
+
+        <Button Grid.Row="5" Content="Criar Conta" Width="150" Height="40" HorizontalAlignment="Center" Click="CriarConta_Click"/>
+    </Grid>
+</Window>

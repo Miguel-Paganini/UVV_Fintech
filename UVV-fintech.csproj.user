@@ -5,7 +5,13 @@
     <Compile Update="View\BancoWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\CriarConta.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\ClienteWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\MenuInicial.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -5,9 +5,11 @@ namespace UVV_fintech.Db
 {
     public class BancoDbContext : DbContext
     {
-        DbSet<Cliente> Clientes { get; set; } = null!;
-        DbSet<Conta> Contas { get; set; } = null!;
-        DbSet<Transacao> Transacoes { get; set; } = null!;
+        public DbSet<Cliente> Clientes { get; set; } = null!;
+        public DbSet<Conta> Contas { get; set; } = null!;
+        public DbSet<ContaCorrente> ContasCorrente { get; set; } = null!;
+        public DbSet<ContaPoupanca> ContasPoupanca { get; set; } = null!;
+        public DbSet<Transacao> Transacoes { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,12 +33,10 @@ namespace UVV_fintech.Db
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Conta>()
-                .Property(c => c.Saldo)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<Transacao>()
-                .Property(t => t.Valor)
-                .HasColumnType("decimal(18,2)");
+                .HasDiscriminator<string>("TipoConta")
+                .HasValue<Conta>("Conta")
+                .HasValue<ContaCorrente>("ContaCorrente")
+                .HasValue<ContaPoupanca>("ContaPoupanca");
 
         }
     }
