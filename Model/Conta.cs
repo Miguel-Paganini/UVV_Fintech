@@ -7,7 +7,7 @@ using UVV_fintech.View;
 
 namespace UVV_fintech.Model
 {
-    internal abstract class Conta
+    internal class Conta
     {
         public int ContaId { get; set; }
         public string NumeroConta { get; set; }

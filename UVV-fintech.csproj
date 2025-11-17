@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Control\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
