@@ -4,8 +4,9 @@
     {
         public decimal TaxaManutencao { get; set; }
 
-        public ContaCorrente() : base()
+        public ContaCorrente(Cliente cliente) : base(cliente)
         {
+            TaxaManutencao = 100;
         }
     }
 }

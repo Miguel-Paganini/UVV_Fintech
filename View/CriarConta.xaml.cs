@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using UVV_fintech.Control;
 
@@ -30,21 +31,21 @@ namespace UVV_fintech.View
             var tipo = (CbTipoConta.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "";
 
             bool resultado = _controller.CriarConta(
-                TxtNome.Text.Trim(),
+                TxtNome.Text,
                 TxtCpf.Text.Trim(),
                 TxtTelefone.Text.Trim(),
-                TxtEndereco.Text.Trim(),
+                TxtEndereco.Text,
                 tipo
             );
 
-            if (resultado)
+            if (!resultado)
             {
-                MessageBox.Show("Conta criada com sucesso!");
-                Close();
+                MessageBox.Show("Já existe um cliente com esse CPF no sistema.");
             }
             else
             {
-                MessageBox.Show("Já existe um cliente com esse CPF no sistema.");
+                MessageBox.Show("Conta criada com sucesso!");
+                Close();
             }
         }
     }

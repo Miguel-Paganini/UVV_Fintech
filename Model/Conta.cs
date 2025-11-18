@@ -1,4 +1,6 @@
-﻿using UVV_fintech.Db;
+﻿using System.Diagnostics;
+using System.Windows;
+using UVV_fintech.Db;
 
 namespace UVV_fintech.Model
 {
@@ -11,7 +13,11 @@ namespace UVV_fintech.Model
         public Cliente Cliente { get; set; }
         public List<Transacao> Transacoes { get; set; } = new List<Transacao>();
 
-        public Conta() { }
+        public Conta(Cliente cliente) { 
+            NumeroConta= GerarNumeroConta();
+            Saldo = 0;
+            Cliente = cliente;
+        }
 
         public string GerarNumeroConta()
         {
@@ -19,22 +25,16 @@ namespace UVV_fintech.Model
             return rand.Next(100000, 999999).ToString();
         }
 
-        public bool CriarConta(Conta conta, Cliente cliente)
+        public bool CadastrarConta(Conta conta)
         {
             using var db = new BancoDbContext();
 
-            // Gerar numero de conta até eles ser único
-            string numeroConta;
-            do
-            {
-                numeroConta = GerarNumeroConta();
-            }
-            while (db.Contas.Any(c => c.NumeroConta == numeroConta));
-
-            cliente.Conta = conta;
-            if (!Cliente.CadastrarCliente(cliente))
+            if (!new Cliente().CadastrarCliente(conta.Cliente))
                 return false;
 
+            MessageBox.Show(conta.NumeroConta);
+            conta.Cliente.Conta = conta;
+            conta.ClienteId = conta.Cliente.ClienteId;
             db.Add(conta);
             db.SaveChanges();
 

@@ -4,8 +4,9 @@
     {
         public decimal TaxaRendimento { get; set; }
 
-        public ContaPoupanca() : base()
+        public ContaPoupanca(Cliente cliente) : base(cliente)
         {
+            TaxaRendimento = 0.005m;
         }
     }
 }

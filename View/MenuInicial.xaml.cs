@@ -29,7 +29,7 @@ namespace UVV_fintech.View
 
         private void BtnMenuBanco_Click(object sender, RoutedEventArgs e)
         {
-            var janelaBanco = new BancoWindow();
+            var janelaBanco = new CriarConta();
             janelaBanco.Show();
         }
     }

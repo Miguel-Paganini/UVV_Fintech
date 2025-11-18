@@ -4,7 +4,7 @@ namespace UVV_fintech.Control
 {
     internal class ContaControl
     {
-        private Conta ContaModel = new();
+        private readonly Conta ContaModel = new();
 
         public bool CriarConta(string nome, string cpf, string telefone, string endereco, string tipoConta)
         {
@@ -19,21 +19,15 @@ namespace UVV_fintech.Control
             Conta conta;
             if (tipoConta == "CC")
             {
-                conta = new ContaCorrente
-                {
-                    TaxaManutencao = 100
-                };
+                conta = new ContaCorrente(cliente);
 
             }
             else
             {
-                conta = new ContaPoupanca
-                {
-                    TaxaRendimento = 0.005m
-                };
+                conta = new ContaPoupanca(cliente);
             }
 
-            if (ContaModel.CriarConta(conta, cliente))
+            if (ContaModel.CadastrarConta(conta))
             {
                 return true;
             }
