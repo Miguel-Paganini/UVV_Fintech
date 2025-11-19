@@ -9,8 +9,8 @@
     <Grid>
         <Button x:Name="btnGerenciarClientes" Content="Gerenciar Clientes" HorizontalAlignment="Left" Margin="70,128,0,0" VerticalAlignment="Top" Height="38" Width="126"/>
         <Button x:Name="btnGerenciarTransacoes" Content="Gerenciar Transações" HorizontalAlignment="Left" Margin="70,72,0,0" VerticalAlignment="Top" Height="37" Width="126"/>
-        <Button x:Name="btnCriarConta" Content="Criar Conta" HorizontalAlignment="Left" Margin="649,72,0,0" VerticalAlignment="Top" Height="50" Width="91"/>
-        <Button x:Name="btnVoltar" Content="Voltar" HorizontalAlignment="Left" Margin="707,367,0,0" VerticalAlignment="Top" Height="46" Width="67"/>
+        <Button x:Name="btnCriarConta" Content="Criar Conta" HorizontalAlignment="Left" Margin="649,72,0,0" VerticalAlignment="Top" Height="50" Width="91" Click="btnCriarConta_Click"/>
+        <Button x:Name="btnVoltar" Content="Voltar" HorizontalAlignment="Left" Margin="707,367,0,0" VerticalAlignment="Top" Height="46" Width="67" Click="btnVoltar_Click"/>
         <Button x:Name="btnExcluirConta" Content="Excluir Conta" HorizontalAlignment="Left" Margin="649,128,0,0" VerticalAlignment="Top" Height="50" Width="91"/>
 
     </Grid>

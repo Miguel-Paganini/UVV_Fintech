@@ -40,5 +40,10 @@ namespace UVV_fintech.Control
             }
             return 1;
         }
+
+        public Conta? BuscarContaPeloNumero(string numeroConta)
+        {
+            return ContaModel.BuscarContaPeloNumero(numeroConta);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Windows;
 using UVV_fintech.Db;
 
@@ -37,6 +38,16 @@ namespace UVV_fintech.Model
             db.SaveChanges();
 
             return true;
+        }
+
+        public Conta? BuscarContaPeloNumero(string numeroConta)
+        {
+            using var db = new BancoDbContext();
+            var conta = db.Contas
+                .Include(c => (c as ContaCorrente).Cliente)
+                .Include(c => (c as ContaPoupanca).Cliente)
+                .FirstOrDefault(c => c.NumeroConta == numeroConta);
+            return conta;
         }
     }
 }

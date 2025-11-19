@@ -1,18 +1,63 @@
 ﻿<Window x:Class="UVV_fintech.View.ClienteWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UVV_fintech.View"
-        mc:Ignorable="d"
-        Title="ClienteWindow" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="btnDepositar" Content="Depositar" HorizontalAlignment="Left" Margin="63,94,0,0" VerticalAlignment="Top" Height="31" Width="166"/>
-        <Button x:Name="btnSacar" Content="Sacar" HorizontalAlignment="Left" Margin="63,192,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.221,2.607" Width="160" Height="30"/>
-        <Button x:Name="btnTransferencia" Content="Transferir" HorizontalAlignment="Left" Margin="63,280,0,0" VerticalAlignment="Top" Height="31" Width="159"/>
-        <Button x:Name="btnVoltar" Content="Voltar" HorizontalAlignment="Left" Margin="702,360,0,0" VerticalAlignment="Top" Height="49" Width="74"/>
-        <Button x:Name="btnSaldo" Content="Mostrar Saldo" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="62" Width="95"/>
-        <Button x:Name="btnExtrato" Content="Extrato" HorizontalAlignment="Left" Margin="726,10,0,0" VerticalAlignment="Top" Height="62" Width="50" RenderTransformOrigin="-0.12,0.533"/>
+        Title="Menu Cliente" Height="450" Width="800">
 
+    <!-- 🔥 TEM QUE FICAR AQUI EM CIMA -->
+    <Window.Resources>
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <!-- Agora sim pode começar o layout -->
+    <Grid>
+        <!-- LOGIN -->
+        <StackPanel Name="LoginPanel" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="LOGIN CLIENTE" FontSize="32" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBox x:Name="TxtConta" Width="200" Height="40"/>
+            <Button Content="Entrar" Width="200" Height="50" Margin="0,10,0,0"
+                    Style="{StaticResource MainButtonStyle}"
+                    Click="BtnEntrar_Click"/>
+        </StackPanel>
+
+        <!-- MENU APÓS LOGIN -->
+        <StackPanel Name="MenuPanel" Visibility="Collapsed"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <TextBlock x:Name="LblInfoCliente" FontSize="20" Margin="0,0,0,20"/>
+
+            <UniformGrid Columns="2" Rows="3" Margin="0,10,0,0">
+
+                <Button Content="Depositar"  Style="{StaticResource MainButtonStyle}" Click="BtnDepositar_Click"/>
+                <Button Content="Sacar"      Style="{StaticResource MainButtonStyle}" Click="BtnSacar_Click"/>
+                <Button Content="Transferir" Style="{StaticResource MainButtonStyle}" Click="BtnTransferir_Click"/>
+                <Button Content="Saldo"      Style="{StaticResource MainButtonStyle}" Click="BtnSaldo_Click"/>
+                <Button Content="Extrato"    Style="{StaticResource MainButtonStyle}" Click="BtnExtrato_Click"/>
+                <Button Content="Voltar"     Style="{StaticResource MainButtonStyle}" Click="BtnVoltar_Click"/>
+
+            </UniformGrid>
+        </StackPanel>
     </Grid>
 </Window>

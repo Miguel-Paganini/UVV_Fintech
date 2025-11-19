@@ -12,5 +12,16 @@ namespace UVV_fintech.View
             InitializeComponent();
         }
 
+        private void btnCriarConta_Click(object sender, RoutedEventArgs e)
+        {
+            var janelaCriarConta = new CriarConta();
+            janelaCriarConta.Show();
+            this.Close();
+        }
+
+        private void btnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
