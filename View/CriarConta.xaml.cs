@@ -10,7 +10,7 @@ namespace UVV_fintech.View
     /// </summary>
     public partial class CriarConta : Window
     {
-        private readonly ContaControl _controller = new ContaControl();
+        private readonly ContaController _controller = new ContaController();
 
         public CriarConta()
         {
@@ -30,7 +30,7 @@ namespace UVV_fintech.View
 
             var tipo = (CbTipoConta.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "";
 
-            bool resultado = _controller.CriarConta(
+            int resultado = _controller.CriarConta(
                 TxtNome.Text,
                 TxtCpf.Text.Trim(),
                 TxtTelefone.Text.Trim(),
@@ -38,14 +38,18 @@ namespace UVV_fintech.View
                 tipo
             );
 
-            if (!resultado)
+            switch (resultado)
             {
-                MessageBox.Show("Já existe um cliente com esse CPF no sistema.");
-            }
-            else
-            {
-                MessageBox.Show("Conta criada com sucesso!");
-                Close();
+                case -1:
+                    MessageBox.Show("Já existe um cliente com esse CPF no sistema.");
+                    break;
+                case 0:
+                    MessageBox.Show("Erro ao criar a conta. Verifique os dados e tente novamente.");
+                    break;
+                case 1:
+                    MessageBox.Show("Conta criada com sucesso!");
+                    Close();
+                    break;
             }
         }
     }

@@ -9,21 +9,35 @@ namespace UVV_fintech.Model
         public string Cpf { get; set; }
         public string Telefone { get; set; }
         public string Endereco { get; set; }
-        public Conta Conta { get; set; }
+        public ContaPoupanca ContaPoupanca { get; set; }
+        public ContaCorrente ContaCorrente { get; set; }
 
         public Cliente() { }
+        public Cliente(string nome, string cpf, string telefone, string endereco)
+        {
+            Nome = nome;
+            Cpf = cpf;
+            Telefone = telefone;
+            Endereco = endereco;
+        }
 
         public bool CadastrarCliente(Cliente cliente)
         {
             using var db = new BancoDbContext();
 
             // Verificar CPF existente
-            if (db.Clientes.Any(c => c.Cpf == cliente.Cpf))
+            if (cliente.VerificarClienteExistente(cliente.Cpf))
                 return false;
 
             db.Add(cliente);
             db.SaveChanges();
             return true;
+        }
+
+        public bool VerificarClienteExistente(string cpf)
+        {
+            using var db = new BancoDbContext();
+            return db.Clientes.Any(c => c.Cpf == cpf);
         }
     }
 }

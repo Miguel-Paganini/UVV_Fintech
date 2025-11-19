@@ -21,9 +21,15 @@ namespace UVV_fintech.Db
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Cliente>()
-                .HasOne(c => c.Conta)
+                .HasOne(c => c.ContaPoupanca)
                 .WithOne(c => c.Cliente)
-                .HasForeignKey<Conta>(c => c.ClienteId)
+                .HasForeignKey<ContaPoupanca>(c => c.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Cliente>()
+                .HasOne(c => c.ContaCorrente)
+                .WithOne(c => c.Cliente)
+                .HasForeignKey<ContaCorrente>(c => c.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Conta>()

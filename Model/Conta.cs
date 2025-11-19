@@ -13,6 +13,7 @@ namespace UVV_fintech.Model
         public Cliente Cliente { get; set; }
         public List<Transacao> Transacoes { get; set; } = new List<Transacao>();
 
+        public Conta() { }
         public Conta(Cliente cliente) { 
             NumeroConta= GerarNumeroConta();
             Saldo = 0;
@@ -29,12 +30,9 @@ namespace UVV_fintech.Model
         {
             using var db = new BancoDbContext();
 
-            if (!new Cliente().CadastrarCliente(conta.Cliente))
-                return false;
-
-            MessageBox.Show(conta.NumeroConta);
-            conta.Cliente.Conta = conta;
             conta.ClienteId = conta.Cliente.ClienteId;
+
+            db.Attach(conta.Cliente);
             db.Add(conta);
             db.SaveChanges();
 
