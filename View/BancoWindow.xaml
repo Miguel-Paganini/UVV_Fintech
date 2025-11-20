@@ -3,15 +3,188 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UVV_fintech.View"
         mc:Ignorable="d"
-        Title="BancoWindow" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="btnGerenciarClientes" Content="Gerenciar Clientes" HorizontalAlignment="Left" Margin="70,128,0,0" VerticalAlignment="Top" Height="38" Width="126"/>
-        <Button x:Name="btnGerenciarTransacoes" Content="Gerenciar Transações" HorizontalAlignment="Left" Margin="70,72,0,0" VerticalAlignment="Top" Height="37" Width="126"/>
-        <Button x:Name="btnCriarConta" Content="Criar Conta" HorizontalAlignment="Left" Margin="649,72,0,0" VerticalAlignment="Top" Height="50" Width="91" Click="btnCriarConta_Click"/>
-        <Button x:Name="btnVoltar" Content="Voltar" HorizontalAlignment="Left" Margin="707,367,0,0" VerticalAlignment="Top" Height="46" Width="67" Click="btnVoltar_Click"/>
-        <Button x:Name="btnExcluirConta" Content="Excluir Conta" HorizontalAlignment="Left" Margin="649,128,0,0" VerticalAlignment="Top" Height="50" Width="91"/>
+        Title="UVV Fintech - Banco"
+        Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A">
 
+    <Window.Resources>
+        <!-- Estilo base para botões "card" -->
+        <Style x:Key="CardButtonBase" TargetType="Button">
+            <Setter Property="Width" Value="190"/>
+            <Setter Property="Height" Value="70"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="16"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10"
+                                      ShadowDepth="3"
+                                      Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Botão primário -->
+        <Style x:Key="PrimaryCardButton" TargetType="Button" BasedOn="{StaticResource CardButtonBase}">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="14"
+                                              ShadowDepth="2"
+                                              Opacity="0.35"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Botão secundário (operação de risco: excluir) -->
+        <Style x:Key="DangerCardButton" TargetType="Button" BasedOn="{StaticResource CardButtonBase}">
+            <Setter Property="Background" Value="#DC2626"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#B91C1C"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="14"
+                                              ShadowDepth="2"
+                                              Opacity="0.35"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Botão neutro (voltar) -->
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#4B5563"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="999">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="8,2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#111827"/>
+                    <Setter Property="BorderBrush" Value="#9CA3AF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Fundo gradiente -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#020617" Offset="0"/>
+                <GradientStop Color="#0F172A" Offset="0.4"/>
+                <GradientStop Color="#1E293B" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header com botão Voltar -->
+        <DockPanel Grid.Row="0" Margin="20,20,20,0">
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
+                <TextBlock Text="Painel do Banco"
+                           FontSize="26"
+                           FontWeight="SemiBold"
+                           Foreground="#F9FAFB"/>
+                <TextBlock Text="Gerencie contas, clientes e transações"
+                           FontSize="14"
+                           Foreground="#9CA3AF"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <Button x:Name="btnVoltar"
+                    Content="Voltar"
+                    Style="{StaticResource GhostButton}"
+                    Click="btnVoltar_Click"
+                    DockPanel.Dock="Right"/>
+        </DockPanel>
+
+        <!-- Card central com ações -->
+        <Border Grid.Row="1"
+                Margin="60,20,60,40"
+                CornerRadius="24"
+                Background="#111827"
+                Padding="30">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Ações disponíveis"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="#E5E7EB"
+                           Margin="0,0,0,10"
+                           HorizontalAlignment="Center"/>
+
+                <WrapPanel HorizontalAlignment="Center"
+                           Margin="0,10,0,0">
+
+                    <!-- Gerenciar Transações -->
+                    <Button x:Name="btnGerenciarTransacoes"
+                            Content="Gerenciar Transações"
+                            Style="{StaticResource PrimaryCardButton}"/>
+
+                    <!-- Gerenciar Clientes -->
+                    <Button x:Name="btnGerenciarClientes"
+                            Content="Gerenciar Clientes"
+                            Style="{StaticResource PrimaryCardButton}"/>
+
+                    <!-- Criar Conta -->
+                    <Button x:Name="btnCriarConta"
+                            Content="Criar Conta"
+                            Style="{StaticResource PrimaryCardButton}"
+                            Click="btnCriarConta_Click"/>
+
+                    <!-- Excluir Conta -->
+                    <Button x:Name="btnExcluirConta"
+                            Content="Excluir Conta"
+                            Style="{StaticResource DangerCardButton}"/>
+                </WrapPanel>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

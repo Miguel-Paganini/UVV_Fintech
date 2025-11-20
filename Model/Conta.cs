@@ -1,53 +1,64 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Windows;
-using UVV_fintech.Db;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UVV_fintech.Model
 {
-    public class Conta
+    public abstract class Conta
     {
         public int ContaId { get; set; }
-        public string NumeroConta { get; set; }
-        public decimal Saldo { get; set; } = 0;
-        public int ClienteId { get; set; }
-        public Cliente Cliente { get; set; }
-        public List<Transacao> Transacoes { get; set; } = new List<Transacao>();
+        public string NumeroConta { get; set; } = null!;
 
-        public Conta() { }
-        public Conta(Cliente cliente) { 
-            NumeroConta= GerarNumeroConta();
-            Saldo = 0;
+        // EF precisa enxergar o saldo → public com set protegido/privado
+        public decimal Saldo { get; protected set; } = 0m;
+
+        public DateTime DataAbertura { get; set; } = DateTime.Now;
+        public bool Ativa { get; set; } = true;
+
+        // Relacionamento 1:1 com Cliente
+        public int ClienteId { get; set; }
+        public Cliente Cliente { get; set; } = null!;
+
+        // 1 Conta -> N Transações
+        public List<Transacao> Transacoes { get; set; } = new();
+
+        protected Conta() { }
+
+        protected Conta(Cliente cliente)
+        {
             Cliente = cliente;
+            ClienteId = cliente.ClienteId;
+            NumeroConta = GerarNumeroConta();
+            Saldo = 0m;
         }
 
-        public string GerarNumeroConta()
+        protected string GerarNumeroConta()
         {
             var rand = new Random();
             return rand.Next(100000, 999999).ToString();
         }
 
-        public bool CadastrarConta(Conta conta)
+        public decimal GetSaldo() => Saldo;
+
+        public string GetTipoConta()
         {
-            using var db = new BancoDbContext();
-
-            conta.ClienteId = conta.Cliente.ClienteId;
-
-            db.Attach(conta.Cliente);
-            db.Add(conta);
-            db.SaveChanges();
-
-            return true;
+            if (this is ContaCorrente) return "Conta Corrente";
+            if (this is ContaPoupanca) return "Conta Poupança";
+            return "Conta";
         }
 
-        public Conta? BuscarContaPeloNumero(string numeroConta)
+        public virtual void Creditar(decimal valor)
         {
-            using var db = new BancoDbContext();
-            var conta = db.Contas
-                .Include(c => (c as ContaCorrente).Cliente)
-                .Include(c => (c as ContaPoupanca).Cliente)
-                .FirstOrDefault(c => c.NumeroConta == numeroConta);
-            return conta;
+            if (valor <= 0) return;
+            Saldo += valor;
+        }
+
+        public virtual bool Debitar(decimal valor)
+        {
+            if (valor <= 0) return false;
+            if (Saldo < valor) return false;
+
+            Saldo -= valor;
+            return true;
         }
     }
 }

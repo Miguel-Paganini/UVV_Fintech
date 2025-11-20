@@ -1,0 +1,162 @@
+﻿<Window x:Class="UVV_fintech.View.TransacaoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="UVV Fintech - Operação"
+        Height="400" Width="500"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A">
+
+    <Window.Resources>
+        <!-- Estilo para rótulos -->
+        <Style x:Key="FormLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Estilo para TextBox -->
+        <Style x:Key="FormInputTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="0,4,0,12"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#020617"/>
+        </Style>
+
+        <!-- Botão base "card" -->
+        <Style x:Key="CardButtonBase" TargetType="Button">
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10"
+                                      ShadowDepth="3"
+                                      Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Botão primário -->
+        <Style x:Key="PrimaryCardButton" TargetType="Button" BasedOn="{StaticResource CardButtonBase}">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="14"
+                                              ShadowDepth="2"
+                                              Opacity="0.35"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Fundo gradiente -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#020617" Offset="0"/>
+                <GradientStop Color="#0F172A" Offset="0.4"/>
+                <GradientStop Color="#1E293B" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0"
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Center">
+            <!-- Título alterado dinamicamente no code-behind -->
+            <TextBlock x:Name="TxtTitulo"
+                       Text="Operação"
+                       FontSize="24"
+                       FontWeight="SemiBold"
+                       Foreground="#F9FAFB"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,4"/>
+            <TextBlock Text="Informe os dados para concluir a operação"
+                       FontSize="13"
+                       Foreground="#9CA3AF"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Card central -->
+        <Border Grid.Row="1"
+                Margin="40,10,40,30"
+                CornerRadius="20"
+                Background="#111827"
+                Padding="24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Inputs -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,10">
+
+                    <!-- Valor -->
+                    <StackPanel>
+                        <TextBlock Text="Valor"
+                                   Style="{StaticResource FormLabel}"/>
+                        <TextBox x:Name="TxtValor"
+                                 Style="{StaticResource FormInputTextBox}"/>
+                    </StackPanel>
+
+                    <!-- Conta destino (visível apenas para transferência) -->
+                    <StackPanel x:Name="PanelContaDestino"
+                                Visibility="Collapsed"
+                                Margin="0,4,0,0">
+                        <TextBlock Text="Conta destino"
+                                   Style="{StaticResource FormLabel}"/>
+                        <TextBox x:Name="TxtContaDestino"
+                                 Style="{StaticResource FormInputTextBox}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Botão principal (texto alterado dinamicamente) -->
+                <StackPanel Grid.Row="2"
+                            HorizontalAlignment="Center"
+                            Margin="0,10,0,0">
+                    <Button x:Name="btnConfirmar"
+                            Content="Confirmar"
+                            Style="{StaticResource PrimaryCardButton}"
+                            Click="BtnConfirmar_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

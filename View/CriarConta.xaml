@@ -3,53 +3,188 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UVV_fintech.View"
         mc:Ignorable="d"
-        Title="CiarConta" Height="450" Width="800" ResizeMode="NoResize">
-    <Grid Margin="20">
+        Title="UVV Fintech - Criar Conta"
+        Height="450" Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A">
+
+    <Window.Resources>
+        <!-- Estilo base para botões "card" -->
+        <Style x:Key="CardButtonBase" TargetType="Button">
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10"
+                                      ShadowDepth="3"
+                                      Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Botão primário -->
+        <Style x:Key="PrimaryCardButton" TargetType="Button" BasedOn="{StaticResource CardButtonBase}">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="14"
+                                              ShadowDepth="2"
+                                              Opacity="0.35"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para rótulos -->
+        <Style x:Key="FormLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Estilo para TextBox / ComboBox -->
+        <Style x:Key="FormInput" TargetType="Control">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#020617"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Fundo gradiente -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#020617" Offset="0"/>
+                <GradientStop Color="#0F172A" Offset="0.4"/>
+                <GradientStop Color="#1E293B" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-        <StackPanel Grid.Row="0" Margin="0 0 0 10">
-            <TextBlock Text="Nome:"/>
-            <TextBox x:Name="TxtNome" Width="250"/>
+        <!-- Header -->
+        <StackPanel Grid.Row="0"
+                    Margin="0,20,0,10"
+                    HorizontalAlignment="Center">
+            <TextBlock Text="Criar nova conta"
+                       FontSize="26"
+                       FontWeight="SemiBold"
+                       Foreground="#F9FAFB"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="Informe os dados do cliente e o tipo de conta"
+                       FontSize="14"
+                       Foreground="#9CA3AF"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,0"/>
         </StackPanel>
 
+        <!-- Card de formulário -->
+        <Border Grid.Row="1"
+                Margin="80,10,80,40"
+                CornerRadius="24"
+                Background="#111827"
+                Padding="30">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Margin="0 0 0 10">
-            <TextBlock Text="CPF:"/>
-            <TextBox x:Name="TxtCpf" Width="250"/>
-        </StackPanel>
+                <!-- Nome -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,20,0">
+                    <TextBlock Text="Nome" Style="{StaticResource FormLabel}"/>
+                    <TextBox x:Name="TxtNome"
+                             Width="250"
+                             Style="{StaticResource FormInput}"/>
+                </StackPanel>
 
+                <!-- CPF -->
+                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,20,0">
+                    <TextBlock Text="CPF" Style="{StaticResource FormLabel}"/>
+                    <TextBox x:Name="TxtCpf"
+                             Width="250"
+                             Style="{StaticResource FormInput}"/>
+                </StackPanel>
 
-        <StackPanel Grid.Row="2" Margin="0 0 0 10">
-            <TextBlock Text="Telefone:"/>
-            <TextBox x:Name="TxtTelefone" Width="250"/>
-        </StackPanel>
+                <!-- Telefone -->
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,20,0">
+                    <TextBlock Text="Telefone" Style="{StaticResource FormLabel}"/>
+                    <TextBox x:Name="TxtTelefone"
+                             Width="250"
+                             Style="{StaticResource FormInput}"/>
+                </StackPanel>
 
+                <!-- Endereço -->
+                <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,20,0">
+                    <TextBlock Text="Endereço" Style="{StaticResource FormLabel}"/>
+                    <TextBox x:Name="TxtEndereco"
+                             Width="250"
+                             Style="{StaticResource FormInput}"/>
+                </StackPanel>
 
-        <StackPanel Grid.Row="3" Margin="0 0 0 10">
-            <TextBlock Text="Endereço:"/>
-            <TextBox x:Name="TxtEndereco" Width="250"/>
-        </StackPanel>
+                <!-- Tipo da Conta -->
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="20,0,0,0">
+                    <TextBlock Text="Tipo da Conta" Style="{StaticResource FormLabel}"/>
+                    <ComboBox x:Name="CbTipoConta"
+                              Width="250"
+                              Style="{StaticResource FormInput}">
+                        <ComboBoxItem Content="Conta Corrente" Tag="CC"/>
+                        <ComboBoxItem Content="Conta Poupança" Tag="CP"/>
+                    </ComboBox>
+                </StackPanel>
 
-
-        <StackPanel Grid.Row="4" Margin="0 0 0 10">
-            <TextBlock Text="Tipo da Conta:"/>
-            <ComboBox x:Name="CbTipoConta" Width="250">
-                <ComboBoxItem Content="Conta Corrente" Tag="CC"/>
-                <ComboBoxItem Content="Conta Poupança" Tag="CP"/>
-            </ComboBox>
-        </StackPanel>
-
-
-        <Button Grid.Row="5" Content="Criar Conta" Width="150" Height="40" HorizontalAlignment="Center" Click="CriarConta_Click"/>
+                <!-- Botão Criar Conta -->
+                <StackPanel Grid.Row="4" Grid.ColumnSpan="2"
+                            HorizontalAlignment="Center"
+                            Margin="0,20,0,0">
+                    <Button x:Name="btnCriarConta"
+                            Content="Criar Conta"
+                            Style="{StaticResource PrimaryCardButton}"
+                            Click="CriarConta_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
