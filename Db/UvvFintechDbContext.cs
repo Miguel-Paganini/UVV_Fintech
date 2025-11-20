@@ -57,6 +57,18 @@ namespace UVV_fintech.Db
                 .HasValue<Depositar>("Deposito")
                 .HasValue<Sacar>("Saque")
                 .HasValue<Transferir>("Transferencia");
+
+            modelBuilder.Entity<Conta>()
+                .HasMany(c => c.Transacoes)
+                .WithOne(t => t.Conta)
+                .HasForeignKey(t => t.ContaId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Transferir>()
+                .HasOne(t => t.ContaDestino)
+                .WithMany()
+                .HasForeignKey(t => t.ContaDestinoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
