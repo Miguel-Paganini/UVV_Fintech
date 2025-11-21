@@ -106,13 +106,52 @@ namespace UVV_fintech.Control
             return conta != null ? conta.GetTipoConta() : "Conta";
         }
 
-        public bool ExcluirContaControl(string numeroConta)
+        /* public bool ExcluirContaControl(string numeroConta)
         {
             if(_modelConta.ExcluirConta(numeroConta))
             {
                 return true;
             }
             return false;
+        }*/
+
+
+        /// <summary>
+        /// Exclui uma conta pelo número.
+        /// Se após a exclusão o cliente ficar sem contas, exclui o cliente também.
+        /// </summary>
+        public bool ExcluirContaControl(string numeroConta)
+        {
+            using var db = new BancoDbContext();
+
+            // busca conta + cliente
+            var conta = db.Contas
+                          .Include(c => c.Cliente)
+                          .FirstOrDefault(c => c.NumeroConta == numeroConta);
+
+            if (conta == null)
+                return false;
+
+            var clienteId = conta.ClienteId;
+
+            // remove a conta
+            db.Contas.Remove(conta);
+            db.SaveChanges();
+
+            // verifica se esse cliente ainda tem alguma conta
+            var aindaTemConta = db.Contas.Any(c => c.ClienteId == clienteId);
+
+            if (!aindaTemConta)
+            {
+                var cliente = db.Clientes.Find(clienteId);
+                if (cliente != null)
+                {
+                    db.Clientes.Remove(cliente);
+                    db.SaveChanges();
+                }
+            }
+
+            return true;
         }
     }
 }

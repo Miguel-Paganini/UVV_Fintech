@@ -64,7 +64,7 @@ namespace UVV_fintech.Model
             return true;
         }
 
-        public bool ExcluirConta(string numeroConta)
+        /*public bool ExcluirConta(string numeroConta)
         {
             using var db = new BancoDbContext();
 
@@ -80,7 +80,7 @@ namespace UVV_fintech.Model
             }
 
             return false;
-        }
+        }*/
 
         public Conta? BuscarContaPeloNumero(string numeroConta)
         {

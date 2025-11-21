@@ -24,7 +24,7 @@ namespace UVV_fintech.Model
             Endereco = endereco;
         }
 
-        public bool ExcluirCliente(int clienteId)
+        /*public bool ExcluirCliente(int clienteId)
         {
             using var db = new BancoDbContext();
 
@@ -34,6 +34,6 @@ namespace UVV_fintech.Model
 
             db.Contas.Remove(conta);
             return true;
-        }
+        }*/
     }
 }
