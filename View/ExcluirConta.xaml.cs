@@ -25,5 +25,17 @@ namespace UVV_fintech.View
         {
             this.Close();
         }
+
+        private void btnExcluir_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(TxtContaExcluir.Text))
+            {
+                MessageBox.Show("Por favor, preencha o campo número conta antes de exluir a conta.",
+                                "Campos obrigatórios",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return;
+            }
+        }
     }
 }

@@ -172,7 +172,7 @@
                         Content="Excluir Conta"
                         Width="220"
                         Margin="0,20,0,0"
-                        Style="{StaticResource PrimaryCardButton}"
+                        Style="{StaticResource PrimaryCardButton}" Click="btnExcluir_Click"
                         />
 
             </StackPanel>
