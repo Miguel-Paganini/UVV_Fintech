@@ -28,7 +28,7 @@ namespace UVV_fintech.View
 
         private void btnGerenciarClientes_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void btnGerenciarTransacoes_Click(object sender, RoutedEventArgs e)

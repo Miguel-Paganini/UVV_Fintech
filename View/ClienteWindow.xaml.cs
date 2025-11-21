@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using System.Windows;
 using UVV_fintech.Control;
 using UVV_fintech.Model;

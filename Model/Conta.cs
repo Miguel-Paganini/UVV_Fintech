@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace UVV_fintech.Model
+﻿namespace UVV_fintech.Model
 {
     public abstract class Conta
     {

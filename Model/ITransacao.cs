@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UVV_fintech.Model
+﻿namespace UVV_fintech.Model
 {
     public interface ITransacao
     {

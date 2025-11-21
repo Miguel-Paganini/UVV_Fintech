@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UVV_fintech.Db;
+﻿using UVV_fintech.Db;
 using UVV_fintech.Model;
 
 namespace UVV_fintech.Control
