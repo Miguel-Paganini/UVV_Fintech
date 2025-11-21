@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UVV_fintech.Db;
+using Microsoft.Data.SqlClient;
 
 namespace UVV_fintech.Model
 {
