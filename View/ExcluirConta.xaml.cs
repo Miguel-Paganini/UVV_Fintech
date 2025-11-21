@@ -11,11 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UVV_fintech.Control;
 
 namespace UVV_fintech.View
 {
     public partial class ExcluirConta : Window
     {
+        private readonly ContaController _contaController = new();
+        
         public ExcluirConta()
         {
             InitializeComponent();

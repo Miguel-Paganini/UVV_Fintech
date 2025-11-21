@@ -44,5 +44,14 @@ namespace UVV_fintech.View
             };
             janelaExluirConta.ShowDialog();
         }
+
+        private void btnGerenciarTransacoes_Click_1(object sender, RoutedEventArgs e)
+        {
+            var janelaGerenciarTransacoes = new GerenciarTransacoes
+            {
+                Owner = this
+            };
+            janelaGerenciarTransacoes.ShowDialog();
+        }
     }
 }

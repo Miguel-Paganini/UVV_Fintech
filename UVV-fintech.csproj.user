@@ -14,6 +14,9 @@
     <Compile Update="View\ExcluirConta.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\GerenciarTransacoes.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\MenuInicial.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

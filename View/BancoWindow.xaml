@@ -166,7 +166,7 @@
                     <!-- Gerenciar Transações -->
                     <Button x:Name="btnGerenciarTransacoes"
                             Content="Gerenciar Transações"
-                            Style="{StaticResource PrimaryCardButton}"/>
+                            Style="{StaticResource PrimaryCardButton}" Click="btnGerenciarTransacoes_Click_1"/>
 
                     <!-- Gerenciar Clientes -->
                     <Button x:Name="btnGerenciarClientes"
