@@ -7,14 +7,8 @@ namespace UVV_fintech.Control
     internal class ContaController
     {
         private readonly ClienteController _clienteController = new();
+        private readonly Conta _modelConta = new();
 
-        /// <summary>
-        /// Cria um cliente e uma conta (CC ou CP).
-        /// Retornos:
-        ///  1  = sucesso
-        ///  0  = algum erro ao criar a conta
-        /// -1  = CPF já cadastrado (cliente não criado)
-        /// </summary>
         public int CriarConta(string nome, string cpf, string telefone, string endereco, string tipoConta)
         {
             // Primeiro tenta criar o cliente
@@ -53,9 +47,6 @@ namespace UVV_fintech.Control
             return 1;
         }
 
-        /// <summary>
-        /// Busca uma conta pelo número.
-        /// </summary>
         public Conta? BuscarContaPeloNumero(string numeroConta)
         {
             using var db = new BancoDbContext();
@@ -65,9 +56,6 @@ namespace UVV_fintech.Control
                      .FirstOrDefault(c => c.NumeroConta == numeroConta);
         }
 
-        /// <summary>
-        /// Aplica rendimento se a conta for poupança.
-        /// </summary>
         public bool AplicarRendimentoPoupanca(string numeroConta)
         {
             using var db = new BancoDbContext();
@@ -116,6 +104,15 @@ namespace UVV_fintech.Control
 
             var conta = db.Contas.FirstOrDefault(c => c.NumeroConta == numeroConta);
             return conta != null ? conta.GetTipoConta() : "Conta";
+        }
+
+        public bool ExcluirContaControl(string numeroConta)
+        {
+            if(_modelConta.ExcluirConta(numeroConta))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

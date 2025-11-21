@@ -1,6 +1,9 @@
-﻿namespace UVV_fintech.Model
+﻿using Microsoft.EntityFrameworkCore;
+using UVV_fintech.Db;
+
+namespace UVV_fintech.Model
 {
-    public abstract class Conta
+    public class Conta
     {
         public int ContaId { get; set; }
         public string NumeroConta { get; set; } = null!;
@@ -18,9 +21,9 @@
         // 1 Conta -> N Transações
         public List<Transacao> Transacoes { get; set; } = new();
 
-        protected Conta() { }
+        public Conta() { }
 
-        protected Conta(Cliente cliente)
+        public Conta(Cliente cliente)
         {
             Cliente = cliente;
             ClienteId = cliente.ClienteId;
@@ -56,6 +59,33 @@
 
             Saldo -= valor;
             return true;
+        }
+
+        public bool ExcluirConta(string numeroConta)
+        {
+            using var db = new BancoDbContext();
+
+            var contaDeletar = BuscarContaPeloNumero(numeroConta);
+
+            if (contaDeletar != null)
+            {
+                if (contaDeletar.Cliente.ExcluirCliente(contaDeletar.ClienteId)) {
+                    db.Contas.Remove(contaDeletar);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public Conta? BuscarContaPeloNumero(string numeroConta)
+        {
+            using var db = new BancoDbContext();
+
+            return db.Contas
+                     .Include(c => c.Cliente)
+                     .FirstOrDefault(c => c.NumeroConta == numeroConta);
         }
     }
 }

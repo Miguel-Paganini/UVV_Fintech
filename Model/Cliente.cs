@@ -1,4 +1,6 @@
-﻿namespace UVV_fintech.Model
+﻿using UVV_fintech.Db;
+
+namespace UVV_fintech.Model
 {
     public class Cliente
     {
@@ -20,6 +22,18 @@
             Cpf = cpf;
             Telefone = telefone;
             Endereco = endereco;
+        }
+
+        public bool ExcluirCliente(int clienteId)
+        {
+            using var db = new BancoDbContext();
+
+            Conta? conta = db.Contas.Find(clienteId);
+
+            if (conta == null) return false;
+
+            db.Contas.Remove(conta);
+            return true;
         }
     }
 }

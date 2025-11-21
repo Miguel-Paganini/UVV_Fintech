@@ -27,6 +27,17 @@ namespace UVV_fintech.View
                                 MessageBoxImage.Warning);
                 return;
             }
+
+            var numeroConta = TxtContaExcluir.Text;
+
+            if(_contaController.ExcluirContaControl(numeroConta))
+            {
+                MessageBox.Show("Conta exluida com sucesso...");
+            }
+            else
+            {
+                MessageBox.Show("Não foi possivel exluir a conta, verifique se o numero esta correto");
+            }
         }
     }
 }
