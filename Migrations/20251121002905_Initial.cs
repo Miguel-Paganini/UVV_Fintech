@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace UVV_fintech.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +18,7 @@ namespace UVV_fintech.Migrations
                     ClienteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cpf = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Endereco = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -34,7 +35,12 @@ namespace UVV_fintech.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NumeroConta = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Saldo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    DataAbertura = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Ativa = table.Column<bool>(type: "bit", nullable: false),
+                    TipoConta = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    TaxaManutencao = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TaxaRendimento = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -53,13 +59,21 @@ namespace UVV_fintech.Migrations
                 {
                     TransacaoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DataHora = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ContaId = table.Column<int>(type: "int", nullable: false)
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false),
+                    TipoTransacao = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    ContaDestinoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transacoes", x => x.TransacaoId);
+                    table.ForeignKey(
+                        name: "FK_Transacoes_Contas_ContaDestinoId",
+                        column: x => x.ContaDestinoId,
+                        principalTable: "Contas",
+                        principalColumn: "ContaId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Transacoes_Contas_ContaId",
                         column: x => x.ContaId,
@@ -69,10 +83,21 @@ namespace UVV_fintech.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clientes_Cpf",
+                table: "Clientes",
+                column: "Cpf",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contas_ClienteId",
                 table: "Contas",
                 column: "ClienteId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transacoes_ContaDestinoId",
+                table: "Transacoes",
+                column: "ContaDestinoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transacoes_ContaId",

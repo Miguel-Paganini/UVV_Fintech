@@ -11,12 +11,12 @@ namespace UVV_fintech.Model
         // EF precisa enxergar o saldo → public com set protegido/privado
         public decimal Saldo { get; protected set; } = 0m;
 
-        public DateTime DataAbertura { get; set; } = DateTime.Now;
-        public bool Ativa { get; set; } = true;
-
         // Relacionamento 1:1 com Cliente
         public int ClienteId { get; set; }
         public Cliente Cliente { get; set; } = null!;
+
+        public DateTime DataAbertura { get; set; } = DateTime.Now;
+        public bool Ativa { get; set; } = true;
 
         // 1 Conta -> N Transações
         public List<Transacao> Transacoes { get; set; } = new();

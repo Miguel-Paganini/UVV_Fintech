@@ -12,8 +12,8 @@ using UVV_fintech.Db;
 namespace UVV_fintech.Migrations
 {
     [DbContext(typeof(BancoDbContext))]
-    [Migration("20251120134921_TransacaoForeignKey")]
-    partial class TransacaoForeignKey
+    [Migration("20251121002905_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

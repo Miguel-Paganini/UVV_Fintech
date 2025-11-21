@@ -59,7 +59,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Botão Voltar (ghost) -->
+        <!-- Botão Voltar -->
         <Style x:Key="GhostButton" TargetType="Button">
             <Setter Property="Foreground" Value="#E5E7EB"/>
             <Setter Property="Background" Value="Transparent"/>
@@ -69,16 +69,18 @@
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Padding" Value="10,4"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="999">
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="999">
                             <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="8,2"/>
+                                      VerticalAlignment="Center"
+                                      Margin="8,2"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -127,20 +129,26 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0"
-                    Margin="20,20,20,10"
-                    HorizontalAlignment="Center">
-            <TextBlock Text="Área do Cliente"
+        <DockPanel Grid.Row="0" Margin="20,20,20,0">
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
+                <TextBlock Text="Área do Cliente"
                        FontSize="26"
                        FontWeight="SemiBold"
                        Foreground="#F9FAFB"
                        HorizontalAlignment="Center"/>
-            <TextBlock Text="Acesse sua conta para realizar operações"
+                <TextBlock Text="Acesse sua conta para realizar operações"
                        FontSize="14"
                        Foreground="#9CA3AF"
                        HorizontalAlignment="Center"
                        Margin="0,4,0,0"/>
-        </StackPanel>
+            </StackPanel>
+            
+            <Button x:Name="btnVoltar"
+                    Content="Voltar"
+                    Style="{StaticResource GhostButton}"
+                    Click="btnVoltar_Click"
+                    DockPanel.Dock="Right"/>
+        </DockPanel>
 
         <!-- Card central -->
         <Border Grid.Row="1"
@@ -214,11 +222,6 @@
                                 Content="Extrato"
                                 Style="{StaticResource PrimaryCardButton}"
                                 Click="BtnExtrato_Click"/>
-
-                        <Button x:Name="btnVoltar"
-                                Content="Voltar"
-                                Style="{StaticResource GhostButton}"
-                                Click="BtnVoltar_Click"/>
                     </WrapPanel>
                 </StackPanel>
             </Grid>

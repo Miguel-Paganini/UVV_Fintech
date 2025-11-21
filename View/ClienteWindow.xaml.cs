@@ -160,13 +160,9 @@ namespace UVV_fintech.View
                             MessageBoxImage.Information);
         }
 
-        private void BtnVoltar_Click(object sender, RoutedEventArgs e)
+        private void btnVoltar_Click(object sender, RoutedEventArgs e)
         {
-            MenuPanel.Visibility = Visibility.Collapsed;
-            LoginPanel.Visibility = Visibility.Visible;
-
-            TxtConta.Text = string.Empty;
-            _contaLogada = null;
+            this.Close();
         }
     }
 }
