@@ -3,10 +3,179 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UVV_fintech.View"
         mc:Ignorable="d"
-        Title="ExcluirConta" Height="450" Width="800">
+        Title="UVV Fintech - Excluir Conta"
+        Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#0F172A">
+
+    <Window.Resources>
+        <!-- Botão base estilo "card" -->
+        <Style x:Key="CardButtonBase" TargetType="Button">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="14"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10"
+                                      ShadowDepth="3"
+                                      Opacity="0.25"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Botão primário azul -->
+        <Style x:Key="PrimaryCardButton" TargetType="Button" BasedOn="{StaticResource CardButtonBase}">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1D4ED8"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="14"
+                                              ShadowDepth="2"
+                                              Opacity="0.35"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Botão cinza "Voltar" -->
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#4B5563"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="999">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Margin="10,2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#111827"/>
+                    <Setter Property="BorderBrush" Value="#9CA3AF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="FormLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <Style x:Key="FormInputTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#020617"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <!-- Fundo gradiente -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#020617" Offset="0"/>
+                <GradientStop Color="#0F172A" Offset="0.4"/>
+                <GradientStop Color="#1E293B" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" Margin="20,20,20,0">
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
+                <TextBlock Text="Excluir Conta"
+                           FontSize="26"
+                           FontWeight="SemiBold"
+                           Foreground="#F9FAFB"/>
+                <TextBlock Text="Remova permanentemente uma conta bancária"
+                           FontSize="14"
+                           Foreground="#9CA3AF"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <Button x:Name="btnVoltar"
+                    Content="Voltar"
+                    Style="{StaticResource GhostButton}"
+                    Click="BtnVoltar_Click"
+                    DockPanel.Dock="Right"/>
+        </DockPanel>
+
+        <!-- Card central -->
+        <Border Grid.Row="1"
+                Margin="80,10,80,40"
+                CornerRadius="24"
+                Background="#111827"
+                Padding="30">
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                <TextBlock Text="Excluir Conta"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="#E5E7EB"
+                           Margin="0,0,0,12"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Número da Conta"
+                           Style="{StaticResource FormLabel}"/>
+
+                <TextBox x:Name="TxtContaExcluir"
+                         Width="220"
+                         Style="{StaticResource FormInputTextBox}"/>
+
+                <Button x:Name="btnExcluir"
+                        Content="Excluir Conta"
+                        Width="220"
+                        Margin="0,20,0,0"
+                        Style="{StaticResource PrimaryCardButton}"
+                        />
+
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

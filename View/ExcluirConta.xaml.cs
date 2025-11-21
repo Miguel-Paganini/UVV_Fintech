@@ -14,14 +14,16 @@ using System.Windows.Shapes;
 
 namespace UVV_fintech.View
 {
-    /// <summary>
-    /// Lógica interna para ExcluirConta.xaml
-    /// </summary>
     public partial class ExcluirConta : Window
     {
         public ExcluirConta()
         {
             InitializeComponent();
+        }
+
+        private void BtnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

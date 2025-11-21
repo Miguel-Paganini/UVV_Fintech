@@ -182,7 +182,8 @@
                     <!-- Excluir Conta -->
                     <Button x:Name="btnExcluirConta"
                             Content="Excluir Conta"
-                            Style="{StaticResource DangerCardButton}"/>
+                            Style="{StaticResource DangerCardButton}"
+                            Click="btnExcluirConta_Click"/>
                 </WrapPanel>
             </StackPanel>
         </Border>
