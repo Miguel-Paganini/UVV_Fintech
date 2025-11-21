@@ -66,12 +66,67 @@ namespace UVV_fintech.Model
 
         public Conta? BuscarContaPeloNumero(string numeroConta)
         {
-            using var db = new BancoDbContext();
-            var conta = db.Contas
-                .Include(c => c.Cliente)
-                .FirstOrDefault(c => c.NumeroConta == numeroConta);
+            string connectionString =
+                "Server=(localdb)\\mssqllocaldb;Database=UVV_FintechDB;Trusted_Connection=True;";
+
+            using var conexao = new SqlConnection(connectionString);
+            conexao.Open();
+
+            var comando = conexao.CreateCommand();
+
+            comando.CommandText = @"
+                SELECT 
+                    c.ContaId,
+                    c.NumeroConta,
+                    c.Saldo,
+                    c.DataAbertura,
+                    c.Ativa,
+                    c.ClienteId,
+                    c.TipoConta,
+                    cli.Nome,
+                    cli.Cpf
+                FROM Contas c
+                INNER JOIN Clientes cli ON cli.ClienteId = c.ClienteId
+                WHERE c.NumeroConta = @numeroConta";
+
+            comando.Parameters.Add(new SqlParameter("@numeroConta", numeroConta));
+
+            using var leitor = comando.ExecuteReader();
+
+            if (!leitor.Read())
+                return null;
+
+            // Cliente
+            var cliente = new Cliente
+            {
+                ClienteId = leitor.GetInt32(leitor.GetOrdinal("ClienteId")),
+                Nome = leitor.GetString(leitor.GetOrdinal("Nome")),
+                Cpf = leitor.GetString(leitor.GetOrdinal("Cpf"))
+            };
+
+            // Descobre o tipo da conta
+            string tipoConta = leitor.GetString(leitor.GetOrdinal("TipoConta"));
+
+            Conta conta = tipoConta switch
+            {
+                "ContaCorrente" => new ContaCorrente(cliente),
+                "ContaPoupanca" => new ContaPoupanca(cliente),
+                _ => throw new Exception($"TipoConta inválido: {tipoConta}")
+            };
+
+            // Preenche dados comuns
+            conta.ContaId = leitor.GetInt32(leitor.GetOrdinal("ContaId"));
+            conta.NumeroConta = leitor.GetString(leitor.GetOrdinal("NumeroConta"));
+            conta.DataAbertura = leitor.GetDateTime(leitor.GetOrdinal("DataAbertura"));
+            conta.Ativa = leitor.GetBoolean(leitor.GetOrdinal("Ativa"));
+
+            // Saldo precisa de setter interno se for protected
+            typeof(Conta).GetProperty("Saldo")!
+                .SetValue(conta, leitor.GetDecimal(leitor.GetOrdinal("Saldo")));
+
             return conta;
         }
+
 
         public virtual string GetTipoConta() => "Conta Genérica";
 
