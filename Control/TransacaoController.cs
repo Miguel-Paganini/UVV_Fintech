@@ -4,104 +4,54 @@ using UVV_fintech.Model;
 
 namespace UVV_fintech.Control
 {
-    internal class TransacaoController
+    public class TransacaoController
     {
-        //private Transacao _modelTransacao = new();
+        private Transacao _modelTransacao = new();
 
-        public bool ProcessarTransacao(ITransacao transacao)
+        public bool ProcessarTransacaoControl(ITransacao entidade)
         {
-            if (transacao is not Transacao entidade)
+            if(_modelTransacao.ProcessarTransacao(entidade))
             {
-                // Não é uma entidade do EF, só executa a lógica.
-                return transacao.Executar();
+                return true;
             }
+            return false;
+        }
 
-            using var db = new BancoDbContext();
-
-            // Garante que a Conta usada na transação está ligada ao contexto
-            if (entidade.Conta != null)
+        public bool DepositarControl(string numeroConta, decimal valor)
+        {
+            if(_modelTransacao.Depositar(numeroConta, valor))
             {
-                db.Attach(entidade.Conta);
+                return true;
             }
-            else
+            return false;
+        }
+
+        public bool SacarControl(string numeroConta, decimal valor)
+        {
+            if(_modelTransacao.Sacar(numeroConta, valor))
             {
-                var conta = db.Contas.FirstOrDefault(c => c.ContaId == entidade.ContaId);
-                if (conta == null)
-                    return false;
-
-                entidade.Conta = conta;
+                return true;
             }
-
-            return ProcessarTransacaoInternal(entidade, db);
+            return false;
         }
 
-        public bool Depositar(string numeroConta, decimal valor)
+        public bool TransferirControl(string numeroConta, string numeroContaDestino, decimal valor)
         {
-            using var db = new BancoDbContext();
-
-            var conta = db.Contas.FirstOrDefault(c => c.NumeroConta == numeroConta);
-            if (conta == null)
-                return false;
-
-            var deposito = new Depositar(valor, conta);
-
-            return ProcessarTransacaoInternal(deposito, db);
+            if(_modelTransacao.Transferir(numeroConta, numeroContaDestino, valor))
+            {
+                return true;
+            }
+            return false;
         }
 
-        public bool Sacar(string numeroConta, decimal valor)
+        public List<Transacao> ObterTransacoesContaControl(string numeroConta)
         {
-            using var db = new BancoDbContext();
-
-            var conta = db.Contas.FirstOrDefault(c => c.NumeroConta == numeroConta);
-            if (conta == null)
-                return false;
-
-            var saque = new Sacar(valor, conta);
-
-            return ProcessarTransacaoInternal(saque, db);
-        }
-
-        public bool Transferir(string numeroContaOrigem, string numeroContaDestino, decimal valor)
-        {
-            using var db = new BancoDbContext();
-
-            var contaOrigem = db.Contas.FirstOrDefault(c => c.NumeroConta == numeroContaOrigem);
-            var contaDestino = db.Contas.FirstOrDefault(c => c.NumeroConta == numeroContaDestino);
-
-            if (contaOrigem == null || contaDestino == null)
-                return false;
-
-            var transferencia = new Transferir(valor, contaOrigem, contaDestino);
-
-            return ProcessarTransacaoInternal(transferencia, db);
-        }
-
-        public List<Transacao> ObterTransacoesPorConta(string numeroConta)
-        {
-            using var db = new BancoDbContext();
-
-            return db.Transacoes
-                     .Include(t => t.Conta)
-                     .Where(t => t.Conta.NumeroConta == numeroConta)
-                     .OrderByDescending(t => t.DataHora)
-                     .ToList();
-        }
-
-        private bool ProcessarTransacaoInternal(Transacao transacao, BancoDbContext db)
-        {
-            var sucesso = transacao.Executar();
-            if (!sucesso)
-                return false;
-
-            db.Transacoes.Add(transacao);
-            db.SaveChanges();
-
-            return true;
+            return _modelTransacao.ObterTransacoesPorConta(numeroConta);
         }
 
         public List<Transacao> ObterListaTransacoes()
         {
-            return Model.Transacao.GetListaTransacoes();
+            return _modelTransacao.GetListaTransacoes();
         }
     }
 }

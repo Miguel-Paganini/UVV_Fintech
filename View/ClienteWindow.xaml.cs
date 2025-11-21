@@ -5,9 +5,6 @@ using UVV_fintech.Model;
 
 namespace UVV_fintech.View
 {
-    /// <summary>
-    /// Lógica interna para ClienteWindow.xaml
-    /// </summary>
     public partial class ClienteWindow : Window
     {
         private Conta? _contaLogada;
@@ -99,7 +96,6 @@ namespace UVV_fintech.View
         {
             if (!VerificarContaLogada()) return;
 
-            // Recarrega a conta do banco para ter o saldo atualizado após depósitos/saques
             var contaAtualizada = _contaController.BuscarContaPeloNumero(_contaLogada!.NumeroConta);
 
             if (contaAtualizada == null)
@@ -124,7 +120,7 @@ namespace UVV_fintech.View
             if (!VerificarContaLogada()) return;
 
             var numeroConta = _contaLogada!.NumeroConta;
-            var transacoes = _transacaoController.ObterTransacoesPorConta(numeroConta);
+            var transacoes = _transacaoController.ObterTransacoesContaControl(numeroConta);
 
             if (transacoes == null || !transacoes.Any())
             {

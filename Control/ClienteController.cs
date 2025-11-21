@@ -8,10 +8,6 @@ namespace UVV_fintech.Control
     {
         private readonly TransacaoController _transacaoController = new();
 
-        /// <summary>
-        /// Cadastra um novo cliente.
-        /// Retorna o cliente criado ou null se o CPF já existir.
-        /// </summary>
         public Cliente? CadastrarCliente(string nome, string cpf, string telefone, string endereco)
         {
             using var db = new BancoDbContext();
@@ -37,27 +33,24 @@ namespace UVV_fintech.Control
                      .OrderBy(c => c.Nome)
                      .ToList();
         }
-        /// <summary>
-        /// Solicita uma transação a partir de uma conta já conhecida.
-        /// tipoOperacao: 0 = Depósito, 1 = Saque, 2 = Transferência
-        /// </summary>
+
         public bool SolicitarTransacao(int tipoOperacao, Conta contaOrigem, decimal valor, string? contaDestinoNumero = null)
         {
             var numeroOrigem = contaOrigem.NumeroConta;
 
             switch (tipoOperacao)
             {
-                case 0: // Depósito
-                    return _transacaoController.Depositar(numeroOrigem, valor);
+                case 0:
+                    return _transacaoController.DepositarControl(numeroOrigem, valor);
 
-                case 1: // Saque
-                    return _transacaoController.Sacar(numeroOrigem, valor);
+                case 1:
+                    return _transacaoController.SacarControl(numeroOrigem, valor);
 
-                case 2: // Transferência
+                case 2:
                     if (string.IsNullOrWhiteSpace(contaDestinoNumero))
                         return false;
 
-                    return _transacaoController.Transferir(numeroOrigem, contaDestinoNumero, valor);
+                    return _transacaoController.TransferirControl(numeroOrigem, contaDestinoNumero, valor);
 
                 default:
                     return false;
