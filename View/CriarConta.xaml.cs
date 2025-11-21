@@ -80,5 +80,10 @@ namespace UVV_fintech.View
                     break;
             }
         }
+
+        private void btnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

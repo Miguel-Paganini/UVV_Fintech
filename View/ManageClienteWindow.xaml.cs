@@ -42,5 +42,9 @@ namespace UVV_fintech.View
                                 MessageBoxImage.Error);
             }
         }
+        private void btnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

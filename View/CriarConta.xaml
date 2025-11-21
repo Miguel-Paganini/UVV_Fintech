@@ -90,6 +90,39 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="#020617"/>
         </Style>
+
+        <Style x:Key="GhostButton" TargetType="Button">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#4B5563"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="999">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Margin="8,2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#111827"/>
+                    <Setter Property="BorderBrush" Value="#9CA3AF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <!-- INÍCIO DO GRID PRINCIPAL -->
@@ -197,6 +230,12 @@
                 </Grid>
             </Border>
         </ScrollViewer>
+
+        <Button x:Name="btnVoltar"
+        Content="Voltar"
+        Style="{StaticResource GhostButton}"
+        Click="btnVoltar_Click"
+        DockPanel.Dock="Right" HorizontalAlignment="Left" Margin="697,14,0,17" Width="63"/>
 
     </Grid>
     <!-- FIM DO GRID PRINCIPAL -->

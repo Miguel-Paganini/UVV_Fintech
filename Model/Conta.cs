@@ -18,6 +18,8 @@ namespace UVV_fintech.Model
         public DateTime DataAbertura { get; set; } = DateTime.Now;
         public bool Ativa { get; set; } = true;
 
+
+
         // 1 Conta -> N Transações
         public List<Transacao> Transacoes { get; set; } = new();
 
@@ -45,6 +47,7 @@ namespace UVV_fintech.Model
             if (this is ContaPoupanca) return "Conta Poupança";
             return "Conta";
         }
+        public string TipoContaDescricao => GetTipoConta();
 
         public virtual void Creditar(decimal valor)
         {
