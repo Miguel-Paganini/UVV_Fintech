@@ -1,4 +1,5 @@
-﻿using UVV_fintech.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using UVV_fintech.Db;
 using UVV_fintech.Model;
 
 namespace UVV_fintech.Control
@@ -27,6 +28,15 @@ namespace UVV_fintech.Control
             return cliente;
         }
 
+        public List<Cliente> ListarClientes()
+        {
+            using var db = new BancoDbContext();
+
+            return db.Clientes
+                     .Include(c => c.Conta)
+                     .OrderBy(c => c.Nome)
+                     .ToList();
+        }
         /// <summary>
         /// Solicita uma transação a partir de uma conta já conhecida.
         /// tipoOperacao: 0 = Depósito, 1 = Saque, 2 = Transferência

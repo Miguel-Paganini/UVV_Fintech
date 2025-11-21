@@ -26,16 +26,6 @@ namespace UVV_fintech.View
             this.Close();
         }
 
-        private void btnGerenciarClientes_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnGerenciarTransacoes_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btnExcluirConta_Click(object sender, RoutedEventArgs e)
         {
             var janelaExluirConta = new ExcluirConta
@@ -52,6 +42,16 @@ namespace UVV_fintech.View
                 Owner = this
             };
             janelaGerenciarTransacoes.ShowDialog();
+        }
+
+        private void btnGerenciarClientes_Click(object sender, RoutedEventArgs e)
+        {
+            var janelaManageClientes = new ManageClienteWindow
+            {
+                Owner = this
+            };
+
+            janelaManageClientes.ShowDialog();
         }
     }
 }

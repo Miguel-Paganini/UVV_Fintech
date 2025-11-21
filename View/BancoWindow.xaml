@@ -171,7 +171,7 @@
                     <!-- Gerenciar Clientes -->
                     <Button x:Name="btnGerenciarClientes"
                             Content="Gerenciar Clientes"
-                            Style="{StaticResource PrimaryCardButton}"/>
+                            Style="{StaticResource PrimaryCardButton}" Click="btnGerenciarClientes_Click"/>
 
                     <!-- Criar Conta -->
                     <Button x:Name="btnCriarConta"

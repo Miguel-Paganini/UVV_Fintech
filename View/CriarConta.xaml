@@ -79,6 +79,17 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="#020617"/>
         </Style>
+        <!-- Teste -->
+        <Style x:Key="ComboBoxInput" TargetType="Control">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#020617"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#020617"/>
+        </Style>
     </Window.Resources>
 
     <!-- INÍCIO DO GRID PRINCIPAL -->
@@ -167,7 +178,7 @@
                         <TextBlock Text="Tipo da Conta" Style="{StaticResource FormLabel}"/>
                         <ComboBox x:Name="CbTipoConta"
                                   Width="250"
-                                  Style="{StaticResource FormInput}">
+                                  Style="{StaticResource ComboBoxInput}">
                             <ComboBoxItem Content="Conta Corrente" Tag="CC"/>
                             <ComboBoxItem Content="Conta Poupança" Tag="CP"/>
                         </ComboBox>
