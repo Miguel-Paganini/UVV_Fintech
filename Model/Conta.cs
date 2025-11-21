@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UVV_fintech.Db;
+using Microsoft.Data.SqlClient;
 
 namespace UVV_fintech.Model
 {
@@ -84,11 +85,61 @@ namespace UVV_fintech.Model
 
         public Conta? BuscarContaPeloNumero(string numeroConta)
         {
-            using var db = new BancoDbContext();
+            string connectionString =
+                "Server=(localdb)\\mssqllocaldb;Database=UVV_FintechDB;Trusted_Connection=True;";
 
-            return db.Contas
-                     .Include(c => c.Cliente)
-                     .FirstOrDefault(c => c.NumeroConta == numeroConta);
+            using var conexao = new SqlConnection(connectionString);
+            conexao.Open();
+
+            var comando = conexao.CreateCommand();
+
+            comando.CommandText = @"
+                SELECT 
+                    c.ContaId,
+                    c.NumeroConta,
+                    c.Saldo,
+                    c.DataAbertura,
+                    c.Ativa,
+                    c.ClienteId,
+                    c.TipoConta,
+                    cli.Nome,
+                    cli.Cpf
+                FROM Contas c
+                INNER JOIN Clientes cli ON cli.ClienteId = c.ClienteId
+                WHERE c.NumeroConta = @numeroConta";
+
+            comando.Parameters.Add(new SqlParameter("@numeroConta", numeroConta));
+
+            using var leitor = comando.ExecuteReader();
+
+            if (!leitor.Read())
+                return null;
+
+            var cliente = new Cliente
+            {
+                ClienteId = leitor.GetInt32(leitor.GetOrdinal("ClienteId")),
+                Nome = leitor.GetString(leitor.GetOrdinal("Nome")),
+                Cpf = leitor.GetString(leitor.GetOrdinal("Cpf"))
+            };
+
+            string tipoConta = leitor.GetString(leitor.GetOrdinal("TipoConta"));
+
+            Conta conta = tipoConta switch
+            {
+                "ContaCorrente" => new ContaCorrente(cliente),
+                "ContaPoupanca" => new ContaPoupanca(cliente),
+                _ => throw new Exception($"TipoConta inválido: {tipoConta}")
+            };
+
+            conta.ContaId = leitor.GetInt32(leitor.GetOrdinal("ContaId"));
+            conta.NumeroConta = leitor.GetString(leitor.GetOrdinal("NumeroConta"));
+            conta.DataAbertura = leitor.GetDateTime(leitor.GetOrdinal("DataAbertura"));
+            conta.Ativa = leitor.GetBoolean(leitor.GetOrdinal("Ativa"));
+
+            typeof(Conta).GetProperty("Saldo")!
+                .SetValue(conta, leitor.GetDecimal(leitor.GetOrdinal("Saldo")));
+
+            return conta;
         }
     }
 }
