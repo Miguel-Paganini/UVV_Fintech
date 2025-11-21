@@ -20,7 +20,7 @@ namespace UVV_fintech.View
         {
             try
             {
-                var clientes = _clienteController.ListarClientes();
+                var clientes = _clienteController.ListarClientesControl();
 
                 if (clientes == null || !clientes.Any())
                 {

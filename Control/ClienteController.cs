@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UVV_fintech.Db;
+﻿using System.Linq;
 using UVV_fintech.Model;
 
 namespace UVV_fintech.Control
@@ -7,31 +6,15 @@ namespace UVV_fintech.Control
     internal class ClienteController
     {
         private readonly TransacaoController _transacaoController = new();
+        private readonly Cliente ClienteModel = new();
 
         public Cliente? CadastrarCliente(string nome, string cpf, string telefone, string endereco)
         {
-            using var db = new BancoDbContext();
+            Cliente cliente = new Cliente(nome, cpf, telefone, endereco);
 
-            // Não permite CPF duplicado
-            if (db.Clientes.Any(c => c.Cpf == cpf))
-                return null;
-
-            var cliente = new Cliente(nome, cpf, telefone, endereco);
-
-            db.Clientes.Add(cliente);
-            db.SaveChanges();
-
-            return cliente;
-        }
-
-        public List<Cliente> ListarClientes()
-        {
-            using var db = new BancoDbContext();
-
-            return db.Clientes
-                     .Include(c => c.Conta)
-                     .OrderBy(c => c.Nome)
-                     .ToList();
+            if (ClienteModel.CadastrarCliente(cliente))
+                return cliente;
+            return null;
         }
 
         public bool SolicitarTransacao(int tipoOperacao, Conta contaOrigem, decimal valor, string? contaDestinoNumero = null)
@@ -40,13 +23,13 @@ namespace UVV_fintech.Control
 
             switch (tipoOperacao)
             {
-                case 0:
+                case 0: // Depósito
                     return _transacaoController.DepositarControl(numeroOrigem, valor);
 
-                case 1:
+                case 1: // Saque
                     return _transacaoController.SacarControl(numeroOrigem, valor);
 
-                case 2:
+                case 2: // Transferência
                     if (string.IsNullOrWhiteSpace(contaDestinoNumero))
                         return false;
 
@@ -55,6 +38,31 @@ namespace UVV_fintech.Control
                 default:
                     return false;
             }
+        }
+
+        public Cliente? BuscarClientePorCpf(string cpf)
+        {
+            return ClienteModel.BuscarClientePeloCpf(cpf);
+        }
+
+        public Cliente? BuscarClientePorIdControl(int clienteId)
+        {
+            return ClienteModel.BuscarClientePeloId(clienteId);
+        }
+
+        public List<Cliente> ListarClientesControl()
+        {
+            return ClienteModel.ListarClientes();
+        }
+
+        public bool ExcluirClienteControl(int clienteId)
+        {
+            return ClienteModel.ExcluirCliente(clienteId);
+        }
+
+        public bool AindaTemContaControl(int clienteId)
+        {
+            return ClienteModel.AindaTemConta(clienteId);
         }
     }
 }
