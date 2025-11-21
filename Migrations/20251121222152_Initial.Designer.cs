@@ -12,7 +12,7 @@ using UVV_fintech.Db;
 namespace UVV_fintech.Migrations
 {
     [DbContext(typeof(BancoDbContext))]
-    [Migration("20251121002905_Initial")]
+    [Migration("20251121222152_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -88,8 +88,7 @@ namespace UVV_fintech.Migrations
 
                     b.HasKey("ContaId");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Contas");
 
@@ -180,8 +179,8 @@ namespace UVV_fintech.Migrations
             modelBuilder.Entity("UVV_fintech.Model.Conta", b =>
                 {
                     b.HasOne("UVV_fintech.Model.Cliente", "Cliente")
-                        .WithOne("Conta")
-                        .HasForeignKey("UVV_fintech.Model.Conta", "ClienteId")
+                        .WithMany("Contas")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -212,7 +211,7 @@ namespace UVV_fintech.Migrations
 
             modelBuilder.Entity("UVV_fintech.Model.Cliente", b =>
                 {
-                    b.Navigation("Conta");
+                    b.Navigation("Contas");
                 });
 
             modelBuilder.Entity("UVV_fintech.Model.Conta", b =>

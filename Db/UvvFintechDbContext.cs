@@ -9,13 +9,6 @@ namespace UVV_fintech.Db
         public DbSet<Conta> Contas { get; set; } = null!;
         public DbSet<Transacao> Transacoes { get; set; } = null!;
 
-        // opcionais, se você quiser consultar por tipo direto:
-        public DbSet<ContaCorrente> ContasCorrente { get; set; } = null!;
-        public DbSet<ContaPoupanca> ContasPoupanca { get; set; } = null!;
-        public DbSet<Depositar> Depositos { get; set; } = null!;
-        public DbSet<Sacar> Saques { get; set; } = null!;
-        public DbSet<Transferir> Transferencias { get; set; } = null!;
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
@@ -26,43 +19,37 @@ namespace UVV_fintech.Db
         {
             base.OnModelCreating(modelBuilder);
 
-            // CPF único (boa prática pra banco)
+            // Indice único para CPF
             modelBuilder.Entity<Cliente>()
                 .HasIndex(c => c.Cpf)
                 .IsUnique();
 
-            // Cliente 1 <-> 1 Conta (independente de ser CC ou CP)
+            // Cliente 1 -> Muitas Contas (uma de cada na logica)
             modelBuilder.Entity<Cliente>()
-                .HasOne(c => c.Conta)
+                .HasMany(c => c.Contas)
                 .WithOne(c => c.Cliente)
-                .HasForeignKey<Conta>(c => c.ClienteId)
+                .HasForeignKey(c => c.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Conta 1 -> N Transacoes
+            // Conta 1 -> Muitas Transacoes
             modelBuilder.Entity<Conta>()
                 .HasMany(c => c.Transacoes)
                 .WithOne(t => t.Conta)
                 .HasForeignKey(t => t.ContaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Herança de Conta (TPH)
+            // Herança TPH para Conta
             modelBuilder.Entity<Conta>()
                 .HasDiscriminator<string>("TipoConta")
                 .HasValue<ContaCorrente>("ContaCorrente")
                 .HasValue<ContaPoupanca>("ContaPoupanca");
 
-            // Herança de Transacao (TPH)
+            // Herança TPH para Transacao
             modelBuilder.Entity<Transacao>()
                 .HasDiscriminator<string>("TipoTransacao")
                 .HasValue<Depositar>("Deposito")
                 .HasValue<Sacar>("Saque")
                 .HasValue<Transferir>("Transferencia");
-
-            modelBuilder.Entity<Conta>()
-                .HasMany(c => c.Transacoes)
-                .WithOne(t => t.Conta)
-                .HasForeignKey(t => t.ContaId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Transferir>()
                 .HasOne(t => t.ContaDestino)

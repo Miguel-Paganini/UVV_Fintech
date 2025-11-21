@@ -68,7 +68,7 @@
             <Setter Property="Margin" Value="0,0,0,4"/>
         </Style>
 
-        <!-- Estilo para TextBox / ComboBox -->
+        <!-- Estilo para TextBox -->
         <Style x:Key="FormInput" TargetType="Control">
             <Setter Property="Height" Value="32"/>
             <Setter Property="FontSize" Value="14"/>
@@ -79,7 +79,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="#020617"/>
         </Style>
-        <!-- Teste -->
+        <!-- Estilo para ComboBox -->
         <Style x:Key="ComboBoxInput" TargetType="Control">
             <Setter Property="Height" Value="32"/>
             <Setter Property="FontSize" Value="14"/>

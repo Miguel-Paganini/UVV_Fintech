@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UVV_fintech.Db;
+using System.Linq;
 using UVV_fintech.Model;
 
 namespace UVV_fintech.Control
@@ -7,147 +7,85 @@ namespace UVV_fintech.Control
     internal class ContaController
     {
         private readonly ClienteController _clienteController = new();
-        private readonly Conta _modelConta = new();
+        private Conta ContaModel = new();
 
         public int CriarConta(string nome, string cpf, string telefone, string endereco, string tipoConta)
         {
-            // Primeiro tenta criar o cliente
             var cliente = _clienteController.CadastrarCliente(nome, cpf, telefone, endereco);
-
             if (cliente == null)
-                return -1; // CPF já existe
+                cliente = _clienteController.BuscarClientePorCpf(cpf)
+                          ?? throw new System.Exception($"CPF '{cpf}' não encontrado.");
 
-            using var db = new BancoDbContext();
-
-            // Garante que o cliente está sendo rastreado por este contexto
-            db.Attach(cliente);
-
-            // Regra: 1 cliente -> 1 conta (independente do tipo)
-            // Se quiser reforçar:
-            // db.Entry(cliente).Reference(c => c.Conta).Load();
-            // if (cliente.Conta != null) return 0;
-
-            Conta conta;
+            // Carrega contas existentes
+            cliente.Contas ??= new System.Collections.Generic.List<Conta>();
 
             if (tipoConta == "CC")
             {
-                conta = new ContaCorrente(cliente);
+                if (cliente.Contas.OfType<ContaCorrente>().Any()) return -1;
+                var conta = new ContaCorrente(cliente);
+                cliente.Contas.Add(conta);
+                conta.SalvarConta();
             }
-            else
+            else if (tipoConta == "CP")
             {
-                conta = new ContaPoupanca(cliente);
+                if (cliente.Contas.OfType<ContaPoupanca>().Any()) return -1;
+                var conta = new ContaPoupanca(cliente);
+                cliente.Contas.Add(conta);
+                conta.SalvarConta();
             }
-
-            // Amarra 1:1
-            cliente.Conta = conta;
-
-            db.Contas.Add(conta);
-            db.SaveChanges();
 
             return 1;
         }
 
         public Conta? BuscarContaPeloNumero(string numeroConta)
         {
-            using var db = new BancoDbContext();
-
-            return db.Contas
-                     .Include(c => c.Cliente)
-                     .FirstOrDefault(c => c.NumeroConta == numeroConta);
+            return ContaModel.BuscarContaPeloNumero(numeroConta);
         }
 
         public bool AplicarRendimentoPoupanca(string numeroConta)
         {
-            using var db = new BancoDbContext();
-
-            var conta = db.Contas
-                          .OfType<ContaPoupanca>()
-                          .FirstOrDefault(c => c.NumeroConta == numeroConta);
-
-            if (conta == null)
-                return false;
-
-            conta.AplicarRendimento();
-            db.SaveChanges();
-            return true;
-        }
-
-        /// <summary>
-        /// Cobra taxa de manutenção se a conta for corrente.
-        /// </summary>
-        public bool CobrarTaxaManutencaoCorrente(string numeroConta)
-        {
-            using var db = new BancoDbContext();
-
-            var conta = db.Contas
-                          .OfType<ContaCorrente>()
-                          .FirstOrDefault(c => c.NumeroConta == numeroConta);
-
-            if (conta == null)
-                return false;
-
-            var sucesso = conta.CobrarTaxaManutencao();
-
-            if (!sucesso)
-                return false;
-
-            db.SaveChanges();
-            return true;
-        }
-
-        /// <summary>
-        /// Retorna o tipo textual da conta (Conta Corrente, Conta Poupança, etc.).
-        /// </summary>
-        public string GetTipoConta(string numeroConta)
-        {
-            using var db = new BancoDbContext();
-
-            var conta = db.Contas.FirstOrDefault(c => c.NumeroConta == numeroConta);
-            return conta != null ? conta.GetTipoConta() : "Conta";
-        }
-
-        /* public bool ExcluirContaControl(string numeroConta)
-        {
-            if(_modelConta.ExcluirConta(numeroConta))
+            var conta = ContaModel.BuscarContaPeloNumero(numeroConta);
+            if (conta is ContaPoupanca cp)
             {
+                cp.AplicarRendimento();
+                cp.SalvarConta();
                 return true;
             }
-            return false;
-        }*/
+            return false; // não é poupança
+        }
 
+        public bool CobrarTaxaManutencaoCorrente(string numeroConta)
+        {
+            var conta = ContaModel.BuscarContaPeloNumero(numeroConta);
+            if (conta is ContaCorrente cc)
+            {
+                bool sucesso = cc.CobrarTaxaManutencao();
+                if (sucesso) cc.SalvarConta();
+                return sucesso;
+            }
+            return false; // não é corrente
+        }
 
-        /// <summary>
-        /// Exclui uma conta pelo número.
-        /// Se após a exclusão o cliente ficar sem contas, exclui o cliente também.
-        /// </summary>
         public bool ExcluirContaControl(string numeroConta)
         {
-            using var db = new BancoDbContext();
-
-            // busca conta + cliente
-            var conta = db.Contas
-                          .Include(c => c.Cliente)
-                          .FirstOrDefault(c => c.NumeroConta == numeroConta);
+            var conta = BuscarContaPeloNumero(numeroConta);
 
             if (conta == null)
                 return false;
 
             var clienteId = conta.ClienteId;
 
-            // remove a conta
-            db.Contas.Remove(conta);
-            db.SaveChanges();
+            conta.ExcluirConta(numeroConta);
 
             // verifica se esse cliente ainda tem alguma conta
-            var aindaTemConta = db.Contas.Any(c => c.ClienteId == clienteId);
+            var aindaTemConta = _clienteController.AindaTemContaControl(clienteId);
 
             if (!aindaTemConta)
             {
-                var cliente = db.Clientes.Find(clienteId);
+                var cliente = _clienteController.BuscarClientePorIdControl(clienteId);
                 if (cliente != null)
                 {
-                    db.Clientes.Remove(cliente);
-                    db.SaveChanges();
+                    _clienteController.ExcluirClienteControl(clienteId);
                 }
             }
 

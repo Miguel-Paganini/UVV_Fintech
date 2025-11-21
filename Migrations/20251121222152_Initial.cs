@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -90,8 +91,7 @@ namespace UVV_fintech.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Contas_ClienteId",
                 table: "Contas",
-                column: "ClienteId",
-                unique: true);
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transacoes_ContaDestinoId",

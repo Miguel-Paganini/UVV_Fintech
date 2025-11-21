@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using UVV_fintech.Db;
 
 namespace UVV_fintech.Model
@@ -8,24 +10,19 @@ namespace UVV_fintech.Model
         public int ContaId { get; set; }
         public string NumeroConta { get; set; } = null!;
 
-        // EF precisa enxergar o saldo → public com set protegido/privado
         public decimal Saldo { get; protected set; } = 0m;
 
-        // Relacionamento 1:1 com Cliente
         public int ClienteId { get; set; }
         public Cliente Cliente { get; set; } = null!;
 
         public DateTime DataAbertura { get; set; } = DateTime.Now;
         public bool Ativa { get; set; } = true;
 
-
-
-        // 1 Conta -> N Transações
         public List<Transacao> Transacoes { get; set; } = new();
 
         public Conta() { }
 
-        public Conta(Cliente cliente)
+        protected Conta(Cliente cliente)
         {
             Cliente = cliente;
             ClienteId = cliente.ClienteId;
@@ -39,16 +36,18 @@ namespace UVV_fintech.Model
             return rand.Next(100000, 999999).ToString();
         }
 
-        public decimal GetSaldo() => Saldo;
-
-        public string GetTipoConta()
+        public bool SalvarConta()
         {
-            if (this is ContaCorrente) return "Conta Corrente";
-            if (this is ContaPoupanca) return "Conta Poupança";
-            return "Conta";
-        }
-        public string TipoContaDescricao => GetTipoConta();
+            using var db = new BancoDbContext();
 
+            db.Attach(Cliente);
+            db.Add(this);
+            db.SaveChanges();
+
+            return true;
+        }
+
+        public decimal GetSaldo() => Saldo;
         public virtual void Creditar(decimal valor)
         {
             if (valor <= 0) return;
@@ -64,7 +63,18 @@ namespace UVV_fintech.Model
             return true;
         }
 
-        /*public bool ExcluirConta(string numeroConta)
+        public Conta? BuscarContaPeloNumero(string numeroConta)
+        {
+            using var db = new BancoDbContext();
+            var conta = db.Contas
+                .Include(c => c.Cliente)
+                .FirstOrDefault(c => c.NumeroConta == numeroConta);
+            return conta;
+        }
+
+        public virtual string GetTipoConta() => "Conta Genérica";
+
+        public bool ExcluirConta(string numeroConta)
         {
             using var db = new BancoDbContext();
 
@@ -80,15 +90,6 @@ namespace UVV_fintech.Model
             }
 
             return false;
-        }*/
-
-        public Conta? BuscarContaPeloNumero(string numeroConta)
-        {
-            using var db = new BancoDbContext();
-
-            return db.Contas
-                     .Include(c => c.Cliente)
-                     .FirstOrDefault(c => c.NumeroConta == numeroConta);
         }
     }
 }
