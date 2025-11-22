@@ -12,8 +12,8 @@ using UVV_fintech.Db;
 namespace UVV_fintech.Migrations
 {
     [DbContext(typeof(BancoDbContext))]
-    [Migration("20251117120639_AddContaHeranca")]
-    partial class AddContaHeranca
+    [Migration("20251121222152_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace UVV_fintech.Migrations
 
                     b.Property<string>("Cpf")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Endereco")
                         .IsRequired()
@@ -51,6 +51,9 @@ namespace UVV_fintech.Migrations
 
                     b.HasKey("ClienteId");
 
+                    b.HasIndex("Cpf")
+                        .IsUnique();
+
                     b.ToTable("Clientes");
                 });
 
@@ -62,8 +65,14 @@ namespace UVV_fintech.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContaId"));
 
+                    b.Property<bool>("Ativa")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DataAbertura")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NumeroConta")
                         .IsRequired()
@@ -79,8 +88,7 @@ namespace UVV_fintech.Migrations
 
                     b.HasKey("ContaId");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Contas");
 
@@ -103,6 +111,11 @@ namespace UVV_fintech.Migrations
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("TipoTransacao")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
 
@@ -111,6 +124,10 @@ namespace UVV_fintech.Migrations
                     b.HasIndex("ContaId");
 
                     b.ToTable("Transacoes");
+
+                    b.HasDiscriminator<string>("TipoTransacao").HasValue("Transacao");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("UVV_fintech.Model.ContaCorrente", b =>
@@ -133,11 +150,37 @@ namespace UVV_fintech.Migrations
                     b.HasDiscriminator().HasValue("ContaPoupanca");
                 });
 
+            modelBuilder.Entity("UVV_fintech.Model.Depositar", b =>
+                {
+                    b.HasBaseType("UVV_fintech.Model.Transacao");
+
+                    b.HasDiscriminator().HasValue("Deposito");
+                });
+
+            modelBuilder.Entity("UVV_fintech.Model.Sacar", b =>
+                {
+                    b.HasBaseType("UVV_fintech.Model.Transacao");
+
+                    b.HasDiscriminator().HasValue("Saque");
+                });
+
+            modelBuilder.Entity("UVV_fintech.Model.Transferir", b =>
+                {
+                    b.HasBaseType("UVV_fintech.Model.Transacao");
+
+                    b.Property<int>("ContaDestinoId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("ContaDestinoId");
+
+                    b.HasDiscriminator().HasValue("Transferencia");
+                });
+
             modelBuilder.Entity("UVV_fintech.Model.Conta", b =>
                 {
                     b.HasOne("UVV_fintech.Model.Cliente", "Cliente")
-                        .WithOne("Conta")
-                        .HasForeignKey("UVV_fintech.Model.Conta", "ClienteId")
+                        .WithMany("Contas")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -155,10 +198,20 @@ namespace UVV_fintech.Migrations
                     b.Navigation("Conta");
                 });
 
+            modelBuilder.Entity("UVV_fintech.Model.Transferir", b =>
+                {
+                    b.HasOne("UVV_fintech.Model.Conta", "ContaDestino")
+                        .WithMany()
+                        .HasForeignKey("ContaDestinoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ContaDestino");
+                });
+
             modelBuilder.Entity("UVV_fintech.Model.Cliente", b =>
                 {
-                    b.Navigation("Conta")
-                        .IsRequired();
+                    b.Navigation("Contas");
                 });
 
             modelBuilder.Entity("UVV_fintech.Model.Conta", b =>
